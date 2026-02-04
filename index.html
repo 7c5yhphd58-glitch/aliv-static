@@ -7,7 +7,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SOS Alívio Imediato - Protocolo Natural</title>
-    <meta name="facebook-domain-verification" content="fwuglslu6v2cdaxj8n27brf86fzxda" />
+    <meta name="facebook-domain-verification" content="fwuglslu6v2cdaxj8n27brf86fzdxa" />
     <meta name="description"
         content="Alívio Rápido para Coceira e Ardência da Candidíase — Método Natural Para Reduzir o Desconforto Ainda Hoje.">
 
@@ -661,12 +661,10 @@
                             Pagamento Único</p>
                     </div>
 
-                    <a href="https://one-health-wa.pay.yampi.com.br/r/DS7EN4CV6M" onclick="initiateCheckout()"
-                        class="group relative inline-flex items-center justify-center bg-brand-bg text-brand-dark hover:bg-white font-bold py-4 px-8 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-95 text-lg md:text-xl uppercase tracking-wide border-2 border-transparent w-full shadow-brand-primary/20 hover:shadow-brand-primary/40 mb-6">
-                        <div class="flex flex-col items-center leading-none">
-                            <span class="text-brand-primary font-extrabold text-sm md:text-base mb-1">ACESSO IMEDIATO E
-                                VITALÍCIO</span>
-                        </div>
+                    <a href="https://one-health-wa.pay.yampi.com.br/r/DS7EN4CV6M" data-utmify
+                        onclick="return initiateCheckout(this.href)"
+                        class="group relative inline-flex items-center justify-center bg-brand-bg text-brand-dark hover:bg-white font-bold py-4 px-8 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-95 text-lg md:text-xl uppercase tracking-wide w-full">
+                        <span class="text-brand-primary font-extrabold">ACESSO IMEDIATO E VITALÍCIO</span>
                         <i data-lucide="arrow-right"
                             class="ml-4 w-6 h-6 text-brand-primary group-hover:translate-x-1 transition-transform"></i>
                     </a>
@@ -867,11 +865,12 @@
             </div>
 
             <div class="flex flex-col items-center gap-6">
-                <a href="https://one-health-wa.pay.yampi.com.br/r/DS7EN4CV6M" onclick="initiateCheckout()"
-                    class="group relative inline-flex items-center justify-center bg-[#f9f5f4] text-[#74131c] hover:bg-white font-black py-3 px-8 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-95 text-lg uppercase tracking-wider shadow-lg">
-                    Quero meu SOS
+                <a href="https://one-health-wa.pay.yampi.com.br/r/DS7EN4CV6M" data-utmify
+                    onclick="return initiateCheckout(this.href)"
+                    class="group relative inline-flex items-center justify-center bg-brand-bg text-brand-dark hover:bg-white font-bold py-4 px-8 rounded-full transition-all duration-200 transform hover:scale-105 active:scale-95 text-lg md:text-xl uppercase tracking-wide w-full">
+                    <span class="text-brand-primary font-extrabold">ACESSO IMEDIATO E VITALÍCIO</span>
                     <i data-lucide="arrow-right"
-                        class="ml-2 w-5 h-5 text-[#74131c] group-hover:translate-x-1 transition-transform stroke-[3px]"></i>
+                        class="ml-4 w-6 h-6 text-brand-primary group-hover:translate-x-1 transition-transform"></i>
                 </a>
 
                 <div
@@ -938,15 +937,28 @@
     <!-- LOGIC SCRIPTS -->
     <!-- 4) INITIATE CHECKOUT (EVENTO DE INTENÇÃO) -->
     <script>
-        function initiateCheckout() {
-            // Meta Pixel
-            if (typeof fbq === 'function') {
-                fbq('track', 'InitiateCheckout');
+        function initiateCheckout(url) {
+            // Disparo seguro do Meta Pixel
+            if (window.fbq) {
+                fbq('track', 'InitiateCheckout', {
+                    value: 17.00,
+                    currency: 'BRL',
+                    content_name: 'SOS Alívio Imediato',
+                    content_type: 'product'
+                });
             }
-            // Microsoft Clarity Tag
+
+            // Clarity (ok manter)
             if (typeof clarity === 'function') {
                 clarity('set', 'cta', 'checkout');
             }
+
+            // Delay seguro antes do redirect
+            setTimeout(function () {
+                window.location.href = url;
+            }, 1200);
+
+            return false;
         }
     </script>
     <script>
@@ -968,6 +980,26 @@
             // Toggle current item
             item.classList.toggle('active');
         }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var checkoutSection = document.getElementById('checkout');
+
+            if (checkoutSection && typeof IntersectionObserver === 'function') {
+                var observer = new IntersectionObserver(function (entries) {
+                    if (entries[0].isIntersecting) {
+                        if (window.fbq) {
+                            fbq('trackCustom', 'ViewCheckoutSection', {
+                                content_name: 'SOS Alívio Imediato'
+                            });
+                        }
+                        observer.disconnect();
+                    }
+                }, { threshold: 0.2 });
+
+                observer.observe(checkoutSection);
+            }
+        });
     </script>
 </body>
 
